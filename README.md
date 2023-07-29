@@ -75,9 +75,10 @@ public function getUsers()
     ```
 
     Результат работы метода:
+    
     ![Результат](https://i.ibb.co/94p8Lkr/image-5.png)
 
-5.  deletePost - удаление поста, по указанному идентификатору пользователя.
+6.  deletePost - удаление поста, по указанному идентификатору пользователя.
     ```php
     $data = $post->deletePost(3);
     ```
