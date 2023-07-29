@@ -9,10 +9,6 @@ class Request
 	const PATCH = "PATCH";
 	const DELETE = "DELETE";
 
-	public static function changeUrl($url)
-	{
-		self::$apiURL = $url;
-	}
 	private static function curlRequest($method, $endpoint, $data = null)
 	{
 
@@ -47,7 +43,7 @@ class Request
 		$response = curl_exec($curl);
 
 		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-		if ($code > 220) {
+		if ($code > 299) {
 			$response = ErrorHandler::JSONResponse(500, "The requst wasn't succesful.");
 		}
 		return $response;
