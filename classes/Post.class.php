@@ -2,25 +2,19 @@
 include './classes/Request.class.php';
 class Post
 {
-	private $api;
-	public function __construct($url)
-	{
-		$this->api = new Request($url);
-	}
-
 
 	public function getPosts($userId = null)
 	{
 		if (is_null($userId)) {
 			// Получение всех постов
-			return $this->api->GETrequest('posts/');
+			return Request::GETrequest('posts/');
 		}
 		// Получение постов пользователя
-		return $this->api->GETrequest('users/' . $userId . '/posts/');
+		return Request::GETrequest('users/' . $userId . '/posts/');
 	}
 	public function getPost($id)
 	{
-		return $this->api->GETrequest('posts/' . $id);
+		return Request::GETrequest('posts/' . $id);
 	}
 	public function addPost($userId = null, $title = null, $body = null)
 	{
@@ -35,8 +29,7 @@ class Post
 		if ($body !== null) {
 			$data['body'] = $body;
 		}
-
-		return $this->api->POSTrequest(
+		return Request::POSTrequest(
 			'posts/',
 			json_encode($data)
 		);
@@ -55,11 +48,11 @@ class Post
 		if ($body !== null) {
 			$data['body'] = $body;
 		}
-		return $this->api->PATCHrequest('posts/' . $postId, json_encode($data));
+		return Request::PATCHrequest('posts/' . $postId, json_encode($data));
 	}
 	public function deletePost($postId)
 	{
-		return $this->api->DELETErequest('posts/' . $postId);
+		return Request::DELETErequest('posts/' . $postId);
 	}
 
 }

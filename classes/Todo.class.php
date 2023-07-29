@@ -1,27 +1,22 @@
 <?php
-include './Request.class.php';
-class User
+class Todo
 {
-	private $api;
-	public function __construct($url)
-	{
-		$this->api = new Request($url);
-	}
+
 	public function getTodos($userId = null)
 	{
 		$response = null;
 		if (is_null($userId)) {
 			// Получение всех заданий
-			$response = $this->api->GETrequest('todos/');
+			$response = Request::GETrequest('todos/');
 		} else {
 			// Получение заданий определенного пользователя
-			$response = $this->api->GETrequest('users/' . $userId . '/todos');
+			$response = Request::GETrequest('users/' . $userId . '/todos');
 		}
 		return $response;
 	}
 	public function getTodo($id)
 	{
-		return $this->api->GETrequest('todos/' . $id);
+		return Request::GETrequest('todos/' . $id);
 	}
 
 }

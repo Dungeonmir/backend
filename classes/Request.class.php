@@ -2,26 +2,25 @@
 include './classes/ErrorHandler.class.php';
 class Request
 {
-	private $apiURL;
-	private $curl;
+	private static $apiURL = "https://jsonplaceholder.typicode.com/";
 
 	const POST = "POST";
 	const GET = "GET";
 	const PATCH = "PATCH";
 	const DELETE = "DELETE";
-	function __construct($URL)
+
+	public static function changeUrl($url)
 	{
-		$this->apiURL = $URL;
-		$this->curl = curl_init();
+		self::$apiURL = $url;
 	}
-	private function curlRequest($method, $endpoint, $data = null)
+	private static function curlRequest($method, $endpoint, $data = null)
 	{
 
-		curl_reset($this->curl);
+		$curl = curl_init();
 
-		curl_setopt($this->curl, CURLOPT_URL, $this->apiURL . $endpoint);
-		curl_setopt($this->curl, CURLOPT_RETURNTRANSFER, true);
-
+		curl_setopt($curl, CURLOPT_URL, self::$apiURL . $endpoint);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Accept:application/json'));
 
 		switch ($method) {
 
@@ -29,51 +28,52 @@ class Request
 				break;
 
 			case self::POST:
-				curl_setopt($this->curl, CURLOPT_POST, true);
-				curl_setopt($this->curl, CURLOPT_POSTFIELDS, $data);
+
+				curl_setopt($curl, CURLOPT_POST, true);
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 				break;
 			case self::PATCH:
-				curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
-				curl_setopt($this->curl, CURLOPT_POSTFIELDS, $data);
+				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'PATCH');
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
 				break;
 
 			case self::DELETE:
-				curl_setopt($this->curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
+				curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'DELETE');
 				break;
 
 			default:
 				break;
 		}
-		$response = curl_exec($this->curl);
+		$response = curl_exec($curl);
 
-		$code = curl_getinfo($this->curl, CURLINFO_HTTP_CODE);
+		$code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if ($code > 220) {
 			$response = ErrorHandler::JSONResponse(500, "The requst wasn't succesful.");
 		}
 		return $response;
-
 	}
-	public function GETrequest($endpoint)
+	public static function GETrequest($endpoint)
 	{
-		$response = $this->curlRequest($this::GET, $endpoint);
+		$response = self::curlRequest(self::GET, $endpoint);
 		if (!$response) {
 			return ErrorHandler::JSONResponse(404, 'Resource not found');
 		}
 		return $response;
 
 	}
-	public function POSTrequest($endpoint, $data)
+	public static function POSTrequest($endpoint, $data)
 	{
-		$response = $this->curlRequest($this::POST, $endpoint, $data);
+
+		$response = self::curlRequest(self::POST, $endpoint, $data);
 		return $response;
 	}
-	public function PATCHrequest($endpoint, $data)
+	public static function PATCHrequest($endpoint, $data)
 	{
-		$response = $this->curlRequest($this::PATCH, $endpoint, $data);
+		$response = self::curlRequest(self::PATCH, $endpoint, $data);
 		return $response;
 	}
-	public function DELETErequest($endpoint)
+	public static function DELETErequest($endpoint)
 	{
-		return $this->curlRequest($this::DELETE, $endpoint);
+		return self::curlRequest(self::DELETE, $endpoint);
 	}
 }
