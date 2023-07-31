@@ -1,99 +1,64 @@
 <?php
-require_once('autoload.php');
 
-echo '
-<style>
-	h1,h3,p,a{
-		font-family:  sans-serif; 
-	}	
-	.post{
-	background-color: lightgray;
-	padding: 15px;
-	text-align: left;
-	max-width: 300px;
-	}
-	.posts{
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	}
-	h1{
-		color: #111; 
-		font-family: "Helvetica Neue", sans-serif; 
-		font-size: 60px; 
-		font-weight: bold; 
-		text-align: center; 
-		margin-top: 20px;
-		margin-bottom: 0;
-	}
-	.invisible{
-	opacity: 0;
-	}
-	.invisible:hover{
-	    opacity: 1;
-	}
-	a {
-		background-color: darkgray;
-		color: white;
-		padding: 5px 10px;
-		text-decoration: none;
-		text-transform: uppercase;
-	 }
-	 
-	a:hover {
-		background-color: #555;
-	 }
-	 
-	a:active {
-		background-color: black;
-	 }
-	 
-	a:visited {
-		background-color: #ccc;
-	 }
-	 .links{
-	display: flex;
-	gap: 10px;
-	flex-wrap: wrap; 
-	margin: 20px;
-	}
-</style>
-<H1>Посты</H1>';
+require_once("./RequestJSON.class.php");
 
-echo '<div class="links">';
-echo '<a href="./addPost.php">Добавить пост</a>';
-echo '<a href="./changePost.php">Изменить пост</a>';
-echo '<a href="./deletePost.php">Удалить пост</a>';
-echo '<a href="./posts.php">Все посты</a>';
-echo '<a href="./post.php">Определенный пост</a>';
-echo '</div>';
+$request = new RequestJSON();
 
-echo '<div class="links">';
-echo '<a href="./todo.php">Определенное задание</a>';
-echo '<a href="./todos.php">Все задания</a>';
-echo '</div>';
 
-echo '<div class="links">';
-echo '<a href="./user.php">Определенный пользователь</a>';
-echo '<a href="./users.php">Все пользователи</a>';
-echo '</div>';
-$post = new Post();
-$json = $post->getPosts();
-$posts = json_decode($json);
+// Получение всех постов с сервера
+$request->getPosts();
 
-$user = new User();
-$json = $user->getUser(1);
-$users = json_decode($json);
+// Получение постов пользователя с id = 5
+$request->getPosts(5);
 
-echo '<div class="posts">';
 
-foreach ($posts as $post) {
+// request->post() - Единый метод для работы с постом (добавление, редактирование, удаление)
+// Параметр $action принимает значения "get", "add", "change", "delete"
 
-	echo '<div class="post">';
-	echo '<p class="invisible">postId = ' . htmlspecialchars($post->id) . '</p>';
-	echo '<h3>' . htmlspecialchars($post->title) . '</h3>';
-	echo '<p>' . htmlspecialchars($post->body) . '</p>';
-	echo '</div>';
-}
+// Получение поста с postId = 4
+$request->post("get", 4);
 
-echo '</div>';
+// Добавление поста для пользователя с id = 6
+$request->post("add", null, 6, "Заголовок", "Текст поста");
+
+// Изменение поста с id=7, изменение создателя поста, заголовка, текста
+$request->post("change", 7, 6, "Измененный заголовок поста", "Измененный текст поста");
+
+// Удаление поста с id=2, в случае успеха возвращает true
+$result = $request->post("delete", 2);
+
+
+// Альтернативно, можно использовать отдельные методы getPost,
+// addPost, changePost, deletePost
+//Получение поста с postId = 4
+$request->getPost(4);
+
+// Добавление поста для пользователя с id = 6
+$request->addPost(6, "Заголовок", "Текст поста");
+
+// Изменение поста с id=7, изменение создателя поста, заголовка, текста
+$request->changePost(7, 6, "Измененный заголовок поста", "Измененный текст поста");
+
+// Удаление поста с id=2
+$request->deletePost(2);
+
+
+// Получение всех заданий с сервера
+$request->getTodos();
+
+//  Получение заданий пользователя с id = 3
+$request->getTodos(3);
+
+// Получение задания  с id = 4
+$request->getTodo(4);
+
+
+// Получение всех пользователей с сервера
+$request->getUsers();
+
+// Получение пользователя с id = 8
+$request->getUser(8);
+
+
+// Вывод результатов на экран при необходимости
+RequestJSON::printJSON($result);

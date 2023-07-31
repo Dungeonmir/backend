@@ -1,124 +1,63 @@
-# PHP Backend
+# PHP Backend task
 
-## Классы для работы с API jsonplaceholder
+## Задание
 
-![Изображение запущенного сервера](introImage.png)
+1.  Написать класс для работы с API https://jsonplaceholder.typicode.com
+2.  Сделать методы для получения пользователей, их постов и заданий
+3.  Добавить метод работы с конкретным постом (добавление / редактирование / удаление)
+4.  Результат залить на GitHub с примерами вызовов класса
 
-### 1. [Request.class.php](https://github.com/Dungeonmir/backend/blob/master/classes/Request.class.php) - статичный класс для создания HTTP запросов
+## Решение
 
-Позволяет легко создавать и отправлять запросы GET, POST, PUT, DELETE используя один класс.
+1. Создан класс для работы с API [RequestJSON.class.php](./RequestJSON.class.php)
 
-#### Для HTTP запросов используется библиотека cURL
+2. Реальзованы методы для получения пользователей, их постов и заданий
 
-На данный момент поддерживается следующие методы запросов
+    -   getUsers() - получения пользователей
 
--   GET
--   POST
--   PUT
--   DELETE
+    -   getPosts() - получение постов
 
-#### Пример работы с классом
+    -   getTodos() - получение заданий
 
-Функция getUsers() используется для получения списка всех пользователей. Она основана на классе Request и вызывает метод GETrequest() для отправки GET запроса.
+3. Добавлен метод post() для работы с конкретным постом (добавление / редактирование / удаление)
 
-```php
-public function getUsers()
-	{
-		return Request::GETrequest('users/');
-	}
-```
+    -   post("get", other_params...) - получение поста
 
-К базовому URL добавляется endpoint _users/_, чтобы сформировать полный запрос к API для получения данных о пользователях.
+    -   post("add", other_params...) - добавление поста
 
-### 2. [Post.class.php](https://github.com/Dungeonmir/backend/blob/master/classes/Post.class.php) - класс для работы с постами
+    -   post("change", other_params...) - изменение поста
 
-Содержит следующие методы:
+    -   post("delete", other_params...) - удаление поста
 
-1.  getPost - получение поста, используя идентификатор.
+4. Результат залит на GitHub с [примерами вызова класса](./index.php)
 
-    Пример использования метода getPost:
+5. Результат работы примеров вызова класса
 
-    ```php
-    $post = new Post();
-    $data = $post->getPost(5);
-    ```
+    -   Результат выполнения метода post("get");
+        ![alt](<./images/getPost(4).png>)
 
-    Результат работы метода:
+    -   Результат выполнения метода post("add")
+        ![alt](<./images/addPost.png>)
 
-    ![Результат работы метода](https://i.ibb.co/47gxFvx/post.png)
-
-2.  getPosts
-
-    -   получение всех доступных постов.
-
-    ```php
-    $data = $post->getPosts();
-    ```
-
-    -   получение всех доступных постов у определенного пользователя, при наличии идентифакотора в параметре.
-
-    ```php
-    $data = $post->getPosts(8);
-    ```
-
-3.  changePost - изменение поста переданными данными, доступно частичное изменение, для этого вместо одного из параметров, кроме первого, нужно указать значение null.
-
-    ```php
-    $data = $post->changePost(5, 2, null,
-    'Post body');
-    ```
-
-4.  addPost - добавдение поста, предоставленными данными. Для добавления нового поста нужно указать идентификатор пользователя, загаловок, тело поста.
-
-    ```php
-    $data = $post->addPost(4, 'Title of the post', 'Post body');
-    ```
-
-    Результат работы метода:
+    -   Результат выполнения метода post("change")
+        ![alt](<./images/changePost.png>)
     
-    ![Результат](https://i.ibb.co/94p8Lkr/image-5.png)
+    -   Результат выполнения метода post("delete")           
+        ```php
+        1
+        ```
 
-6.  deletePost - удаление поста, по указанному идентификатору пользователя.
-    ```php
-    $data = $post->deletePost(3);
-    ```
+    -   Результат выполнения метода getPosts()
+        ![alt](<./images/getPosts(5).png>)
 
-### 3. [Todo.class.php](https://github.com/Dungeonmir/backend/blob/master/classes/Todo.class.php) - класс для работы с задачами
+    -   Результат выполнения метода getTodos()
+        ![alt](<./images/getTodos.png>)
 
-Содержит следующие методы:
+    -   Результат выполнения метода getTodo()
+        ![alt](<./images/getTodo.png>)
 
-1. getTodo - получение задачи по идентификатору задач
-    ```php
-    $todo = new Todo();
-    $data = $todo->getTodo(5);
-    ```
-2. getTodos - получение всех задач
+    -   Результат выполнения метода getUser()
+        ![alt](<./images/getUser(8).png>)
 
-    ```php
-    $data = $todo->getTodos();
-    ```
-
-### 3. [User.class.php](https://github.com/Dungeonmir/backend/blob/master/classes/User.class.php) - класс для работы с пользователями
-
-Содержит следующие методы:
-
-1. getUser - получение пользователя по идентификатору пользователя
-    ```php
-    $user = new User;
-    $data = $user->getUser(5);
-    ```
-2. getUsers - получение всех пользователей
-
-    ```php
-    $data = $user->getUsers();
-    ```
-
-### 3. [ErrorHandler.class.php](https://github.com/Dungeonmir/backend/blob/master/classes/ErrorHandler.class.php) - класс для обработки ошибок в формате JSON
-
-Содержит метод **JSONResponse** с параметрами HTTP статус код и сообщение-пояснение к ошибке. Пример вызова метода класса:
-
-```php
-if (!$response) {
-	return ErrorHandler::JSONResponse(404, 'Resource not found');
-}
-```
+    -   Результат выполнения метода getUsers()
+        ![alt](<./images/getUsers.png>)
