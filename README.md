@@ -33,31 +33,40 @@
 
 5. Результат работы примеров вызова класса
 
-    -   Результат выполнения метода post("get");
+    -   Результат выполнения метода post("get")
+        
         ![alt](<./images/getPost(4).png>)
 
     -   Результат выполнения метода post("add")
+        
         ![alt](<./images/addPost.png>)
 
     -   Результат выполнения метода post("change")
+        
         ![alt](<./images/changePost.png>)
     
     -   Результат выполнения метода post("delete")           
+        
         ```php
         1
         ```
 
     -   Результат выполнения метода getPosts()
+        
         ![alt](<./images/getPosts(5).png>)
 
     -   Результат выполнения метода getTodos()
+        
         ![alt](<./images/getTodos.png>)
 
     -   Результат выполнения метода getTodo()
+        
         ![alt](<./images/getTodo.png>)
 
     -   Результат выполнения метода getUser()
+        
         ![alt](<./images/getUser(8).png>)
 
     -   Результат выполнения метода getUsers()
+        
         ![alt](<./images/getUsers.png>)
