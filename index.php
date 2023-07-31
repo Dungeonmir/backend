@@ -25,7 +25,7 @@ $request->post("add", null, 6, "Заголовок", "Текст поста");
 $request->post("change", 7, 6, "Измененный заголовок поста", "Измененный текст поста");
 
 // Удаление поста с id=2, в случае успеха возвращает true
-$result = $request->post("delete", 2);
+$request->post("delete", 2);
 
 
 // Альтернативно, можно использовать отдельные методы getPost,
@@ -57,7 +57,7 @@ $request->getTodo(4);
 $request->getUsers();
 
 // Получение пользователя с id = 8
-$request->getUser(8);
+$result = $request->getUser(8);
 
 
 // Вывод результатов на экран при необходимости
